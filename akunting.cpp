@@ -22,27 +22,27 @@ class account
 {
 	int acno;	// akun nomor
 	char name[50];	// akun nama
-	int deposit;
+	int nominal;
 	char type;
 
 		public:
-		//withdraw money (int n), subtract from blance
-		void withdraw(int);
-		//deposit money (int n)
-		void dep(int);
-		//create account
+		//bayar, subtract from balance / saldo
+		void bayar(int);
+		//Tambah hutang / Piutang (int n)
+		void tambah(int);
+		//buat akun
 		void create_account();
-		//show account details CONST
+		//tampilkan akun detail
 		void show_account() const;
-		//modify account
+		//ubah akun
 		void modify();
-		//report - show data in tabular format CONST
+		//report - show data di tabular format CONST
 		void report() const;
-		//getAccountNumber CONST
+		//ambil akun id/no CONST
 		int getAcNo() const;
-		//get balanceAmount CONST
+		//ambil balance / saldo CONST
 		int getBal() const;
-		//getAccountType CONST
+		//ambil tipe akun CONST
 		char getAcType() const;
 };
 
@@ -64,7 +64,7 @@ void account::create_account()
 			break;
 	}
 	cout << "\nIsi Nominal Awal:";
-	cin>>deposit;
+	cin>>nominal;
 	cout << "\n\nAkun Dibuat...";
 }
 void account::show_account() const
@@ -72,7 +72,7 @@ void account::show_account() const
 	cout << "\nAkun No. : " << acno;
 	cout << "\nNama Akun : " << name;
 	cout << "\nAkun Tipe : " << type;
-	cout << "\nSaldo : " << deposit;
+	cout << "\nSaldo : " << nominal;
 }
 void account::modify()
 {
@@ -84,20 +84,20 @@ void account::modify()
 	cin >> type;
 	type = toupper(type);
 	cout << "\nUbah Jumlah Nominal :";
-	cin >> deposit;
+	cin >> nominal;
 }
-void account::withdraw(int n)
+void account::bayar(int n)
 {
-	deposit -= n;
+	nominal -= n;
 }
-void account::dep(int n)
+void account::tambah(int n)
 {
-	deposit += n;
+	nominal += n;
 }
 void account::report() const
 {
 	//setw(int) is set width
-	cout << acno << setw(10) << " " << name << setw(10) << " " << type << setw(6) << deposit << endl;
+	cout << acno << setw(10) << " " << name << setw(10) << " " << type << setw(6) << nominal << endl;
 }
 int account::getAcNo() const
 {
@@ -105,7 +105,7 @@ int account::getAcNo() const
 }
 int account::getBal() const
 {
-	return deposit;
+	return nominal;
 }
 char account::getAcType() const
 {
@@ -120,7 +120,7 @@ void display_sp(int);	// specific record
 void modify_account(int);
 void delete_account(int);
 void display_all();
-void deposit_withdraw(int, int);
+void tambah_kurang(int, int);
 void intro();
 
 // *******************************************
@@ -132,7 +132,7 @@ void intro();
 //****************************************************************
 void write_account()
 {
-	// need account
+	// deklarasi account
 	account ac;
 	//output to file, binary, append
 	ofstream outFile;
@@ -271,7 +271,7 @@ void display_all()
 	}
 	inFile.close();
 }
-void deposit_withdraw(int n, int option)
+void tambah_kurang(int n, int option)
 {
 	int amt;
 	bool found = false;
@@ -302,7 +302,7 @@ void deposit_withdraw(int n, int option)
 				}
 				
 				cin >> amt;
-				ac.dep(amt);
+				ac.tambah(amt);
 			}
 			if (option == 2)
 			{
@@ -323,7 +323,7 @@ void deposit_withdraw(int n, int option)
 						cout << "Piutang Lunas";
 					}
 				else
-					ac.withdraw(amt);
+					ac.bayar(amt);
 			}
 			// modify account in file
 			int pos = (-1)*static_cast<int>(sizeof(ac));
@@ -378,11 +378,11 @@ int main() {
 			break;
 		case '2':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;
-			deposit_withdraw(num, 1);
+			tambah_kurang(num, 1);
 			break;
 		case '3':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;
-			deposit_withdraw(num, 2);
+			tambah_kurang(num, 2);
 			break;
 		case '4':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;

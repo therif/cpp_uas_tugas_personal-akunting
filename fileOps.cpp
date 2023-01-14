@@ -17,11 +17,11 @@ using namespace std;
 int openfile()
 {
 	ofstream fout;
-	// tries to find or writes the file called out.txt
+	// mencari dan menemukan file out/txt
 	fout.open("out.txt");
 	char str[30] = "Hello World!";
 
-	fout << str;	 //Write string to file;
+	fout << str;	 //Menulis ke file;
 	fout.close();	// close file
 
 	return 0;
@@ -33,7 +33,7 @@ int readfile()
 	fin.open("out.txt");
 	char ch;
 
-	while (!fin.eof())	// eof() stands for end of file, boolean
+	while (!fin.eof())	// eof() returnya boolean
 	{
 		fin.get(ch);
 		cout << ch;

@@ -37,6 +37,7 @@ Debug/
 *.exe
 *.out
 *.app
+*.dat
 
 .DS_Store
 .vscode
