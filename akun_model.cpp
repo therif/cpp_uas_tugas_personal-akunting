@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cstring>
 
 class account {
 	int acno;	// akun nomor
@@ -36,14 +37,14 @@ void account::buat_akun() {
 	std::cin.ignore(); //untuk meng-ignore sebuah new line
 	std::cin.getline(name, 50);	// sets size of input to 50 characters
 	
-	while (true)
-	{
+	while (true) {
 		std::cout << "\nIsi Tipe Akun (Hutang/Piutang) as H or P : ";
 		std::cin >> type;
 		type = toupper(type);
 		if (type == 'H' || type == 'P')
 			break;
 	}
+	
 	std::cout << "\nIsi Nominal Awal : ";
 	std::cin >> nominal;
 	std::cout << "\n\nAkun Dibuat... || Tekan Sembarang Tombol...";
@@ -78,13 +79,12 @@ void account::tambah(int n) {
 }
 
 void account::report() const {
-	// int lengthAcNo = std::to_string(acno).length(); 
-	// int lengthAcNo = (acno==0)?1:log10(acno)+1;  
+	int lengthAcNo = std::to_string(acno).length(); 
 
-	int lengthAcName = sizeof(name)/sizeof(char);
+	int lengthAcName = strlen(name);
 
 	//setw(int) untuk manipulator set width
-	std::cout << acno << std::setw(8) << " " << name << std::setw(50-lengthAcName) << " " << type << std::setw(6) << nominal << std::endl;
+	std::cout << acno << std::setw(8-lengthAcNo) << " " << name << std::setw(33-lengthAcName) << " " << type << std::setw(15) << nominal << std::endl;
 }
 
 int account::getAcNo() const {
