@@ -2,9 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
-#include <iomanip>
-#include "pch.h"
-#include "Header.h"
+//mengambil class akun di sub file 
+#include "akun.cpp"
 
 using namespace std;
 
@@ -16,149 +15,52 @@ using namespace std;
 	char cmdclear[6] = "clear";
 #endif
 
+//utnuk penyimpanan simple data saja
 char file[13] = "akunting.dat";
 
-class account 
-{
-	int acno;	// akun nomor
-	char name[50];	// akun nama
-	int nominal;
-	char type;
-
-		public:
-		//bayar, subtract from balance / saldo
-		void bayar(int);
-		//Tambah hutang / Piutang (int n)
-		void tambah(int);
-		//buat akun
-		void create_account();
-		//tampilkan akun detail
-		void show_account() const;
-		//ubah akun
-		void modify();
-		//report - show data di tabular format CONST
-		void report() const;
-		//ambil akun id/no CONST
-		int getAcNo() const;
-		//ambil balance / saldo CONST
-		int getBal() const;
-		//ambil tipe akun CONST
-		char getAcType() const;
-};
-
-void account::create_account()
-{
-	// show / direct user to enter details
-	cout << "\nIsi Nomor Akun :";
-	cin >> acno;
-	cout << "\nIsi Nama Akun :";
-	cin.ignore();
-	cin.getline(name, 50);	// sets size of input to 50 characters
-	
-	while (true)
-	{
-		cout << "\nIsi Tipe Akun (Hutang/Piutang) as H or P :";
-		cin >> type;
-		type = toupper(type);
-		if (type == 'H' || type == 'P')
-			break;
-	}
-	cout << "\nIsi Nominal Awal:";
-	cin>>nominal;
-	cout << "\n\nAkun Dibuat...";
-}
-void account::show_account() const
-{
-	cout << "\nAkun No. : " << acno;
-	cout << "\nNama Akun : " << name;
-	cout << "\nAkun Tipe : " << type;
-	cout << "\nSaldo : " << nominal;
-}
-void account::modify()
-{
-	cout << "\nAkun No. :" << acno;
-	cout << "\nIsi Nama Akun :";
-	cin.ignore();
-	cin.getline(name, 50);
-	cout << "\nUbah Tipe Akun (H/P) :";
-	cin >> type;
-	type = toupper(type);
-	cout << "\nUbah Jumlah Nominal :";
-	cin >> nominal;
-}
-void account::bayar(int n)
-{
-	nominal -= n;
-}
-void account::tambah(int n)
-{
-	nominal += n;
-}
-void account::report() const
-{
-	//setw(int) is set width
-	cout << acno << setw(10) << " " << name << setw(10) << " " << type << setw(6) << nominal << endl;
-}
-int account::getAcNo() const
-{
-	return acno;
-}
-int account::getBal() const
-{
-	return nominal;
-}
-char account::getAcType() const
-{
-	return type;
-}
-
 // *******************************************
-// function declaration
+// Fungsi deklarasi
 // *******************************************
-void write_account();
-void display_sp(int);	// specific record
-void modify_account(int);
-void delete_account(int);
-void display_all();
+void akun_buat();
+void akun_show_sp(int);	// specific record
+void akun_ubah(int);
+void akun_hapus(int);
+void akun_show_all();
 void tambah_kurang(int, int);
 void intro();
 
-// *******************************************
-// File Operation Functions
-// *******************************************
 
-//***************************************************************
-//    	function to write in file
-//****************************************************************
-void write_account()
-{
+// ***************************************************************
+// Fungsi membuat akun baru
+// ****************************************************************
+void akun_buat() {
 	// deklarasi account
 	account ac;
 	//output to file, binary, append
 	ofstream outFile;
 	outFile.open(file, ios::binary | ios::app);
-	// call account's create_account();
-	ac.create_account();
-	// put into file
-	// We need to cast because write expects char
+	// memanggil fungsi buat_akun();
+	ac.buat_akun();
+	// Menulis ke File
+	// Disini menggunakan cast ke pointer class ac yg telah dibuat, 
+	// dengan menulis expektasi char
 	outFile.write(reinterpret_cast<char *>(&ac), sizeof(account));
-	//close file
+	// tutup file karena sudah selesai prosesnya
 	outFile.close();
 }
-//***************************************************************
-//    	function to read specific record from file
-//****************************************************************
-void display_sp(int n)
-{
-	// display specific record, n as acno, using show_account()
+// ***************************************************************
+// Fungsi membaca dan menampilkan spesifik data
+// ****************************************************************
+void akun_show_sp(int n) {
 	account ac;
-	bool exist_flag = false;	// account exists flag, defualt 0 or false
+	bool exist_flag = false;	// penanda akun ada, defualt 0 / false
+	//menggunakan ifstream dengan tujuan hanya open as read only saja
 	ifstream inFile;
+	//open file sebagai binari mode, dam 
 	inFile.open(file, ios::binary);
 	
-	// make sure file exists
-	if (!inFile)
-	{
+	// memastikan file ada
+	if (!inFile) {
 		cout << "File tidak dapat dibuka !! Tekan sembarang...";
 		return;
 	}
@@ -168,15 +70,16 @@ void display_sp(int n)
 	{
 		if (ac.getAcNo() == n)
 		{
-			ac.show_account();
+			ac.show_akun();
 			exist_flag = true;
 		}
 	}
 	inFile.close();
 	if (!exist_flag)	//exist_flag is false
 		cout << "\n\nNomor Akun tidak ada";
+		cout << "\nTekan Sembarang Tombol...";
 }
-void modify_account(int n)
+void akun_ubah(int n)
 {
 	account ac;
 	bool found_flag = false;
@@ -193,9 +96,9 @@ void modify_account(int n)
 		kFile.read(reinterpret_cast<char *>(&ac), sizeof(account));
 		if (ac.getAcNo() == n)
 		{
-			ac.show_account();
+			ac.buat_akun();
 			cout << "\n\nIsi detail Akun baru" << endl;
-			ac.modify();
+			ac.ubah();
 			// have a pointer at the start of the account
 			int pos = (-1) * static_cast<int>(sizeof(account));
 			// goes to the line before data entry
@@ -203,15 +106,17 @@ void modify_account(int n)
 			// writes over old data
 			kFile.write(reinterpret_cast<char *>(&ac), sizeof(account));
 			
-			cout << "\n\n\t Data diperbarui";
+			cout << "\n\n\t Data diperbarui...";
+			cout << "\nTekan Sembarang Tombol...";
 			found_flag = true;
 		}
 	}
 	kFile.close();
 	if (!found_flag)
-		cout << "\n\nData tidak ada";
+		cout << "\n\nData tidak ada...";
+		cout << "\nTekan Sembarang Tombol...";
 }
-void delete_account(int n)
+void akun_hapus(int n)
 {
 	bool found;
 	//account declare
@@ -248,8 +153,9 @@ void delete_account(int n)
 	//rename temp as original
 	rename("temp.dat", file);
 	cout << "\n\n\tData dihapus ...";
+	cout << "\nTekan Sembarang Tombol...";
 }
-void display_all()
+void akun_show_all()
 {
 	account ac;
 	ifstream inFile;
@@ -263,13 +169,14 @@ void display_all()
 
 	cout << "\n\n\tDAFTAR AKUN\n\n";
 	cout << "====================================================\n";
-	cout << "A/c no.      NAME           Type  Nominal\n";
+	cout << "A/C No.      NAMA           TIPE  NOMINAL\n";
 	cout << "====================================================\n";
 	while (inFile.read(reinterpret_cast<char *>(&ac), sizeof(account)))
 	{
 		ac.report();
 	}
 	inFile.close();
+	cout << "\n\n\nTekan Sembarang Tombol...";
 }
 void tambah_kurang(int n, int option)
 {
@@ -290,15 +197,15 @@ void tambah_kurang(int n, int option)
 		File.read(reinterpret_cast<char *>(&ac), sizeof(account));
 		if (ac.getAcNo() == n)
 		{
-			ac.show_account();
+			ac.show_akun();
 			if (option == 1)
 			{
 				if (ac.getAcType() == 'H') {
 					cout << "\n\n\tTAMBAH HUTANG ";
-					cout << "\n\nIsi jumlah Hutang baru";
+					cout << "\n\nIsi jumlah Hutang baru : ";
 				} else {
 					cout << "\n\n\tTAMBAH PIUTANG ";
-					cout << "\n\nIsi jumlah Piutang baru";
+					cout << "\n\nIsi jumlah Piutang baru : ";
 				}
 				
 				cin >> amt;
@@ -308,10 +215,10 @@ void tambah_kurang(int n, int option)
 			{
 				if (ac.getAcType() == 'H') {
 					cout << "\n\n\tBAYAR HUTANG ";
-					cout << "\n\nIsi Jumlah Bayar Hutang";
+					cout << "\n\nIsi Jumlah Bayar Hutang : ";
 				} else {
 					cout << "\n\n\tBAYAR HUTANG ";
-					cout << "\n\nIsi Jumlah Bayar Piutang";
+					cout << "\n\nIsi Jumlah Bayar Piutang : ";
 				}
 
 				cin >> amt;
@@ -329,13 +236,15 @@ void tambah_kurang(int n, int option)
 			int pos = (-1)*static_cast<int>(sizeof(ac));
 			File.seekp(pos, ios::cur);
 			File.write(reinterpret_cast<char *> (&ac), sizeof(account));
-			cout << "\n\n\t Data diperbarui";
+			cout << "\n\n\t Data diperbarui...";
+			cout << "\nTekan Sembarang Tombol...";
 			found = true;
 		}
 	}
 	File.close();
 	if (!found)
-		cout << "\n\n Data tidak ada ";
+		cout << "\n\n Data tidak ada...";
+		cout << "\nTekan Sembarang Tombol...";
 }
 
 void intro()
@@ -345,6 +254,7 @@ void intro()
 	cout << "\n\n\t by Kelompok 5 (TI):";
 	cout << "\n\t - Arif Kurniawan (1002220036)";
 	cout << "\n\t - Danny Ismarianto Ruhiyat (1002220014)";
+
 	cout << "\n\nPress enter to continue...";
 
 	cin.get();
@@ -368,13 +278,13 @@ int main() {
 		cout << "\n\n\t06. TUTUP AKUN";
 		cout << "\n\n\t07. UBAH / MODIF AKUN";
 		cout << "\n\n\t08. KELUAR";
-		cout << "\n\n\tPilih Aksi (1-8) ";
+		cout << "\n\n\tPilih Aksi (1-8) : ";
 		cin >> ch;
 		system(cmdclear);
 		switch (ch)
 		{
 		case '1':
-			write_account();
+			akun_buat();
 			break;
 		case '2':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;
@@ -386,26 +296,27 @@ int main() {
 			break;
 		case '4':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;
-			display_sp(num);
+			akun_show_sp(num);
 			break;
 		case '5':
-			display_all();
+			akun_show_all();
 			break;
 		case '6':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;
-			delete_account(num);
+			akun_hapus(num);
 			break;
 		case '7':
 			cout << "\n\n\tIsi nomor Akun : "; cin >> num;
-			modify_account(num);
+			akun_ubah(num);
 			break;
 		case '8':
 			cout << "\n\n\tTerima Kasih.";
+			cout << "";
 			break;
 		default:cout << "\a";
 		}
 		cin.ignore();
-		cin.get();
+		cin.get(); //sama dengan getline tapi tidak dengan baris baru
 	} while (ch != '8');
 	return 0;
 }

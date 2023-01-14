@@ -4,8 +4,8 @@
 // http://www.cppforschool.com/tutorial/files2.html
 //
 
-#include "pch.h"
-#include "Header.h"
+// #include "pch.h"
+// #include "Header.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -60,7 +60,7 @@ cin.get()		// get(string_name, size)
 int readFile()
 {
 	string line;
-	ifstream myfile("example.txt");
+	ifstream myfile("contoh.txt");
 	if (myfile.is_open())
 	{
 		while (getline(myfile, line))
@@ -69,7 +69,7 @@ int readFile()
 		}
 		myfile.close();
 	}
-	else cout << "unable to open file";
+	else cout << "Tidak dapat membuka file";
 
 	return 0;
 }
