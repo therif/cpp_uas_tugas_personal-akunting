@@ -40,5 +40,8 @@ Debug/
 *.dat
 
 .DS_Store
+.dSYM/
+*.dSYM/
 .vscode
 akunting
+akunting.dat
