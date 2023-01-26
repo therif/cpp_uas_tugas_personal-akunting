@@ -1,6 +1,6 @@
-#include <iostream>
-#include <iomanip>
-#include <cstring>
+#include <iostream> //utk input output
+#include <iomanip> //format output
+#include <cstring> //utk string dan array
 
 class account {
 	int acno;	// akun nomor
@@ -31,7 +31,7 @@ class account {
 };
 
 void account::buat_akun() {
-	std::cout << "\nIsi Nomor Akun : ";
+	std::cout << "\nIsi Nomor Akun : "; 
 	std::cin >> acno;
 	std::cout << "\nIsi Nama Akun : ";
 	std::cin.ignore(); //untuk meng-ignore sebuah new line
@@ -75,13 +75,13 @@ void account::bayar(int n) {
 }
 
 void account::tambah(int n) {
-	nominal += n;
+	nominal += n; 
 }
 
 void account::report() const {
 	int lengthAcNo = std::to_string(acno).length(); 
 
-	int lengthAcName = strlen(name);
+	int lengthAcName = strlen(name); 
 
 	//setw(int) untuk manipulator set width
 	std::cout << acno << std::setw(8-lengthAcNo) << " " << name << std::setw(33-lengthAcName) << " " << type << std::setw(15) << nominal << std::endl;

@@ -1,7 +1,7 @@
 
 #include <iostream>
-#include <fstream>
-#include <cctype>
+#include <fstream> //file stream
+#include <cctype> //untuk char type dan bentuk
 
 #include "akun_model.cpp" //mengambil class akun di sub file 
 
@@ -19,10 +19,10 @@ using namespace std;
 char file[13] = "akunting.dat";
 
 // *******************************************
-// Fungsi deklarasi
+// Fungsi deklarasi method
 // *******************************************
 void akun_buat();
-void akun_show_sp(int);	// specific record
+void akun_show_sp(int);	// spesifik record
 void akun_ubah(int);
 void akun_hapus(int);
 void akun_show_all();
@@ -166,12 +166,15 @@ void akun_show_all() {
 	cout << "=========================================================\n";
 	cout << "A/c No.      NAMA                     TIPE        NOMINAL\n";
 	cout << "=========================================================\n";
-	while (inFile.read(reinterpret_cast<char *>(&ac), sizeof(account))) {
+	while (inFile.read(reinterpret_cast<char *>(&ac), sizeof(account))) { 
 		ac.report();
 	}
 	inFile.close();
 	cout << "\n\n\nTekan Sembarang Tombol...";
+	
+
 }
+
 
 void tambah_kurang(int n, int option) {
 	int amt;
@@ -225,7 +228,7 @@ void tambah_kurang(int n, int option) {
 			// ubah akun di file
 			int pos = (-1)*static_cast<int>(sizeof(ac));
 			File.seekp(pos, ios::cur);
-			File.write(reinterpret_cast<char *> (&ac), sizeof(account));
+			File.write(reinterpret_cast<char *> (&ac), sizeof(account)); 
 			cout << "\n\n\t Data diperbarui...";
 			cout << "\nTekan Sembarang Tombol...";
 			found = true;
@@ -303,7 +306,8 @@ int main() {
 				cout << "\n\n\tTerima Kasih.";
 				cout << "";
 				break;
-			default:cout << "\a";
+			default:
+				cout << "\a";
 		}
 
 		cin.ignore();
