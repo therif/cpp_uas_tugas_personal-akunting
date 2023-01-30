@@ -91,10 +91,10 @@ void akun_ubah(int n) {
 
 	while (!kFile.eof() && !found_flag) {
 		// baca file konten
-		kFile.read(reinterpret_cast<char *>(&ac), sizeof(account));
+		kFile.read(reinterpret_cast<char *>(&ac), sizeof(account)); 
 		if (ac.getAcNo() == n) {
-			ac.buat_akun();
-			cout << "\n\nIsi detail Akun baru" << endl;
+			//ac.buat_akun();
+			//cout << "\n\nIsi detail Akun baru" << endl;
 			ac.ubah();
 			// pointer pada awal akun
 			int pos = (-1) * static_cast<int>(sizeof(account));
